@@ -11,6 +11,29 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4.1.1
 
+      - name: setup Node
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: '18'
+      
+      - name: Build Node.js cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      
+      - name: install deps
+        run: npm ci
+
+      - name: build
+        run: npm run build
+      
+      - name: create assets
+        run: |
+          tar -czf dist.tar.gz ./dist
+          zip -qq -r ./dist.zip ./dist
+
       - name: create release
         id: create_release
         uses: actions/create-release@v1
@@ -21,14 +44,26 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: upload release
-        id: upload-release-asset 
+
+      - name: upload dist.zip
+        id: upload-dist-zip
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./README.md
-          asset_name: README.md
-          asset_content_type: text/markdown
+          asset_path: ./dist.zip
+          asset_name: dist.zip
+          asset_content_type: application/x-zip
+      
+      - name: upload dist.tar
+        id: upload-dist-tar 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./dist.tar.gz
+          asset_name: dist.tar.gz
+          asset_content_type: application/x-tar
           
