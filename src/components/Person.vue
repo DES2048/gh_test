@@ -23,6 +23,6 @@
         <h2>Person info</h2>
         <p><b>Name:</b> {{ person.name}}</p>
         <p><b>Email:</b> {{ person.email}}</p>
-        <p><b>Age:</b>{{person.age}}</p>
+        <p><b>Age:</b> {{person.age}}</p>
     </div>
 </template>
