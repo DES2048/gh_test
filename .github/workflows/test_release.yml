@@ -1,7 +1,6 @@
 name: simple_release
 on:
   push:
-    branches: ["master"]
     tags: 'v*'
 
 jobs:
