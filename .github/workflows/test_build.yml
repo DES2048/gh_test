@@ -1,4 +1,4 @@
-name: test_workflow
+name: test-build
 on:
   workflow_dispatch:
 
@@ -13,7 +13,14 @@ jobs:
         uses: actions/setup-node@v4.0.0
         with:
           node-version: '18'
-
+      
+      - name: Build Node.js cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      
       - name: install deps
         run: npm ci
 
