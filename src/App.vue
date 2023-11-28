@@ -6,7 +6,7 @@ import Person from './components/Person.vue'
 
   const person = {
     name: "oleg",
-    email: "oleg@mail.ru",
+    email: "electrochange@mail.ru",
     age:36
   }
 </script>
