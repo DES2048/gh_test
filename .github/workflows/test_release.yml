@@ -31,7 +31,7 @@ jobs:
       
       - name: create assets
         run: |
-          tar -czf dist.tar.gz ./dist
+          tar -czf dist.tar.gz dist/
           zip -qq -r ./dist.zip ./dist
 
       - name: create release
