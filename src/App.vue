@@ -15,7 +15,7 @@ import Person from './components/Person.vue'
   
 
   <main>
-    <Greet name="Oleg"/>
+    <Greet name="Oleg Podzorov"/>
     <Person :person="person" />
   </main>
 </template>
